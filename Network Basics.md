@@ -82,7 +82,9 @@
 
 ### 2.1 계층 모델
 
-서로 다른 시스템 간의 연결을 위해 표준된 연결 방식이 필요하다. **ISO(International Standard Organization)**는 **OSI(Open System Interconnectioin)** 7계층 모델로 네트워크 시스템이 갖춰야할 기능을 정의한다.
+서로 다른 시스템 간의 연결을 위해 표준된 연결 방식이 필요하다. 국제 표준화 기구인 **ISO(International Standard Organization)**는 **OSI(Open System Interconnectioin)** 7계층 모델로 네트워크 시스템이 갖춰야할 기능을 정의한다.
+
+[OSI 7 계층.md](https://github.com/leegwae/computer-network/blob/main/OSI%207%20Layer%20Model.md) 참고
 
 
 
@@ -98,7 +100,7 @@
 
 
 
-### 2.2.2 게이트워이
+### 2.2.2 게이트웨이
 
 **게이트웨이(Gateway)**는 인터네트워킹 기능을 수행하는 시스템을 의미한다. 리피터, 브리지, 라우터로 구분할 수 있다.
 
@@ -134,7 +136,13 @@ TODO
 
 #### 3.1.2 호스트 이름
 
-호스트 이름은 일반 사용자가 호스트를 지칭할 때 사용한다.
+호스트 이름은 일반 사용자가 호스트를 지칭할 때 사용한다. DNS는 호스트 이름을 다음과 같이 네 계층 구조로 나눈다.
+
+```
+<호스트>.<단체 이름>.<단체 종류>.<국가 도메인>
+```
+
+예) `google.co.kr` 에서 `google`은 단체 이름, `co`는 일반 회사(company)를 가리키는 단체 종류, `kr`은 한국(korea)를 가리키는 국가 도메인
 
 
 
