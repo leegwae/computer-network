@@ -6,7 +6,8 @@
 
 
 
-[네트워크 기초 용어](https://github.com/leegwae/computer-network/blob/main/Network%20Basics.md)
+- [네트워크 기초 용어](https://github.com/leegwae/computer-network/blob/main/Network%20Basics.md)
+- [OSI 7 계층](https://github.com/leegwae/computer-network/blob/main/OSI%207%20Layer%20Model.md)
 
 
 
@@ -14,7 +15,7 @@
 
 - [ ] Network Basics
   - [ ] 2.2.2 게이트웨이 라우터 보충
-- [ ] OSI 7 계층
+- [x] OSI 7 계층
 
 
 
