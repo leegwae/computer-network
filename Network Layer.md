@@ -131,3 +131,20 @@ IPv6 헤더 뒤에 하나 이상의 확장 헤더를 추가할 수 있다.
 ### Ipv6 주소
 
 IPv6 주소는 128비트의 이진수로 16비트씩 끊어 `:`로 구분한다. 
+
+
+
+## DHCP
+
+DHCP(Dynamic Host COnfiguration Protocol)로 호스트에 IP 주소를 자동으로 할당하는 기능을 제공하는 프로토콜이다. DHCP는 클라이언트/서버 모델을 따른다. DHCP 서버는 자동으로 할당 가능한 IP 주소의 풀을 관리한다. 클라이언트가 서버에게 요청 메시지를 전송하면 서버는 IP 주소를 할당하여 응답한다. 클라이언트는 사용이 끝나면 IP 주소를 반환한다. 클라이언트의 포트 번호는 68, DHCP 서버의 포트 번호는 67이다.
+
+
+
+### DHCP 프로토콜 동작 과정
+
+DHCP 메시지는 UDP 데이터그램에 캡슐화되어 전송된다. DHCP 메시지의 `Options` 필드로 메시지의 종류를 구분하며, `Your IP Address` 필드에 할당된 IP 주소가 들어간다.
+
+1. `DHCP_DISCOVER`: 클라이언트가 DHCP 서버를 찾기 위해 DHCP 메시지를 브로드캐스팅한다.
+2. `DHCP_OFFER`: DHCP 서버가 `DHCP_DISCOVER` 메시지에 브로드캐스팅으로 응답한다. `Your IP Address` 필드에 권고하는 IP 주소를 지정한다.
+3. `DHCP_REQUEST`: 클라이언트는 응답받은 여러 `DHCP_OFFER` 중 적당한 IP 주소를 선택하여 해당 DHCP 서버에게 응답한다.
+4. `DHCP_ACK`/`DHCP_NACK`: `DHCP_REQUEST` 메시지를 받은 DHCP 서버는 최종적으로 IP 주소가 사용 가능한지 확인하고 `DHCP_ACK` 메시지를 보낸다. 먼저 선점되었다면 `DHCP_NACK` 메시지를 보낸다. 이 경우 클라이언트는 다시 `DHCP_DISCOVER`를 시도해야한다.
