@@ -57,6 +57,28 @@
 
 대표적인 프로토콜은 **BGP(Border Gateway protocol)**이다. BGP는 종류가 다른 AS에서 동작하는 라우터가 라우팅 정보를 교환할 수 있도록 한다. TCP 프로토콜을 사용하여 메시지를 교환한다.
 
+
+
+## IP 주소
+
+IP 주소는 네트워크의 호스트를 구분하는 주소이다. 호스트가 인터넷에 접속하려면 반드시 IP 주소를 할당받아야한다.
+
+### 공인 IP와 사설 IP
+
+**공인 IP(Public IP)**는 네트워크 외부와 통신할 때 사용하는 주소이다. ISP(Internet Service Provider)가 제공하며 전세계에서만 유일하다. 사설 IP(Private IP)는 네트워크 내부에서만 사용하는 주소이다. 라우터가 제공하며 하나의 네트워크에서만 유일하다. 사설 IP는 IPv4 부족 문제를 해결하기 위해 나온 방법이다. 네트워크에 속한 여러 호스트는 하나의 public ip로 인터넷에 접속할 수 있게 된다.
+
+### 고정 IP와 유동 IP
+
+고정 IP(Static IP)는 호스트에 고정적으로 부여되는 주소로 반납하기 전까지 독점한다. 보안성이 우수하다. 유동 IP(Dynamic IP)는 호스트에게 임시로 부여되는 주소로, 대부분 호스트는 네트워크에 접속할 때마다 새로운 IP를 발급받는다.
+
+
+
+## NAT
+
+**NAT(Network Address Trasmission)**은 라우터 또는 방화벽에서 IP 패킷의 포트 번호와 IP 주소를 다시 기록하여 네트워크 트래픽을 주고받는 기술이다. 패킷이 네트워크 외부로 나갈 때 사설 IP를 공인 IP로 변환하고, 패킷이 네트워크 내부로 들어올 때 공인 IP를 사설 IP로 변환한다. NAT의 주소 풀에 주소가 부족하면 패킷이 삭제되고 ICMP 메시지가 송신 호스트에게 발송된다.
+
+
+
 ## 혼잡 제어
 
 ### 혼잡의 원인
@@ -183,8 +205,6 @@ DHCP 메시지는 UDP 데이터그램에 캡슐화되어 전송된다. DHCP 메�
 
 **ARP(Address Resolution Protocol)**은 IP 주소를 MAC 주소로 변환하는 기능을 제공하는 프로토콜이다. TCP/IP에서 송신 호스트가 사용자가 사용자 프로그램에 입력한 수신 호스트의 IP 주소에 대응하는 MAC 주소를 얻기 위해 사용한다. 호스트는 다른 호스트의 IP 주소와 MAC 주소의 대응 관계를 저장한 ARP 캐시 테이블을 유지한다.
 
-
-
 ### ARP 프로토콜 동작 과정
 
 1. `ARP request`: 송신 호스트가 네트워크의 모든 호스트들에게 패킷을 브로드캐스팅한다.
@@ -195,8 +215,6 @@ DHCP 메시지는 UDP 데이터그램에 캡슐화되어 전송된다. DHCP 메�
 ## RARP
 
 **RARP(Reverse Address Resolution Protocol)**은 MAC 주소를 IP 주소로 변환하는 기능을 제공하는 프로토콜이다. IP 주소는 파일에 보관되므로 파일 시스템이 존재하지 않는 호스트가 자신의 IP 주소를 얻기 위하여 사용한다.
-
-
 
 ### RARP 프로토콜 동작 과정
 
@@ -216,5 +234,5 @@ DHCP 메시지는 UDP 데이터그램에 캡슐화되어 전송된다. DHCP 메�
 ## 참고
 
 [ARP 쉽게 이해하기](https://aws-hyoh.tistory.com/entry/ARP-%EC%89%BD%EA%B2%8C-%EC%9D%B4%ED%95%B4%ED%95%98%EA%B8%B0)
-
 [Network\] ARP(주소 결정 프로토콜)에 대하여](https://coding-factory.tistory.com/720)
+[geeksforgeeks - Network Address Translation(NAT)](https://www.geeksforgeeks.org/network-address-translation-nat/?ref=lbp)
