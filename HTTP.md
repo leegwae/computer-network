@@ -78,7 +78,10 @@ HTTP `HEAD` 메서드는 `GET` 메서드로 리소스를 요청했을 때 돌아
 
 ### OPTIONS
 
-HTTP `OPTIONS` 메서드는 서버가 지원하는 메서드를 확인하기 위해 사용한다.
+HTTP `OPTIONS` 메서드는 명시한 자원에 대해 서버가 어떤 통신 옵션을 지원하는지 알기 위해 사용한다.
+
+- 어떤 메서드로 요청할 수 있는지
+- 크로스 오리진 요청을 허용하는지
 
 ### TRACE
 
@@ -163,4 +166,22 @@ HTTP 응답 메시지는 **HTTP 응답 상태 코드(HTTP response status codes)
 - [MDN - HTTP 개요](https://developer.mozilla.org/ko/docs/Web/HTTP/Overview)
 - [MDN - HTTP의 진화](https://developer.mozilla.org/ko/docs/Web/HTTP/Basics_of_HTTP/Evolution_of_HTTP)
 - [MDN - HTTP response status codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)
+
+
+
+## 스터디
+
+1. HTTP의 특징에 대해서 말해보세요
+
+   HTTP의 특징은 비연결성과 무상태성이다.
+
+   1. HTTP의 무상태성이 무엇인가요?
+
+      각각의 HTTP 요청은 독립적으로, 서버는 이전 요청에 대한 어떠한 상태도 유지하지 않는다.
+
+      1. 왜 HTTP는 무상태성을 채택했을까요?
+
+         서버가 상태를 유지하지 않아도 되므로 확장하기 좋다.
+
+         1. 그렇다면 로그인 유지처럼 인증 상태를 유지해야하는 경우는 어떻게 하나요? / 로드밸런싱에서 인증 상태는 어떻게 처리하라 수 있나요?
 
