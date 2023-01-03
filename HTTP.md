@@ -278,6 +278,46 @@ HTTP/3.0dms UDP에 기반한 QUIC 프로토콜을 사용한다. 헤더를 커스
 
 
 
+## HTTP로 통신하기
+
+### WebSocket
+
+HTTP는 단방향 통신으로 서버는 클라이언트의 요청에 대한 응답만 보낼 수 있으며 연결 설정과 해제를 반복해야한다. 이는 실시간으로 두 호스트가 데이터를 주고받는 서비스-채팅에는 적합하지 않다. HTML5의 WebSocket은 한 번 수립된 TCP 연결로 클라이언트와 서버가 자유롭게 데이터를 송수신할 수 있다. 클라이언트는 연결 설정에서 HTTP를 사용하여 서버가 WebSocket을 지원하는지 확인한다.
+
+```http
+GET /chat HTTP/1.1
+Host: example.com:8000
+Upgrade: websocket
+Connection: Upgrade
+Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==
+Sec-WebSocket-Version: 13
+```
+
+서버는 위 요청에 대하여 다음과 같이 수락할 수 있다.
+
+```http
+HTTP/1.1 101 Switching Protocols
+Upgrade: websocket
+Connection: Upgrade
+Sec-WebSocket-Accept: s3pPLMBiTxaQ9kYGzzhZRbK+xOo=
+```
+
+WebSocket API를 사용하거나 Node.js를 기반으로 WebSocket API를 제공하는 Socket.IO를 사용할 수 있다.
+
+### 폴링
+
+폴링(polling)은 클라이언트가 일정한 주기로 서버에게 HTTP 요청을 보낸다. 폴링의 주기가 짧으면 서버에 부하가 갈 수 있으며 주기가 길면 실시간성이 떨어진다.
+
+### 롱 폴링
+
+롤 폴링(long polling)은 클라이언트의 요청에 즉시 응답을 보내지 않고 대기하다가 이벤트가 발생하면(데이터에 변경이 생기면) 데이터를 전송한다. 클라이언트는 응답을 받으면 다시 요청한다. 클라이언트의 수가 많거나 이벤트의 발생이 잦다면 서버에 부하가 심해진다.
+
+### SSE
+
+HTML5의 SSE(server-sent events)는 단방향 연결을 지원하여 서버가 클라이언트에게 이벤트를 전송할 수 있다. 서버의 이벤트를 클라이언트에게 알릴 때 WebSocket보다 가볍게 사용할 수 있다. HTTP를 통해 전송된다.
+
+
+
 ## 참고
 
 - [GeeksforGeeks - HTTP Full Form](https://www.geeksforgeeks.org/http-full-form/)
@@ -288,6 +328,7 @@ HTTP/3.0dms UDP에 기반한 QUIC 프로토콜을 사용한다. 헤더를 커스
 - [MDN - HTTP response status codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)
 - [MDN - Keep-Alive](https://developer.mozilla.org/ko/docs/Web/HTTP/Headers/Keep-Alive)
 - [web.dev - Introduction to HTTP/2](https://web.dev/performance-http2/)
+- [MDN - Using server-sent events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events)
 
 
 
@@ -307,3 +348,8 @@ HTTP/3.0dms UDP에 기반한 QUIC 프로토콜을 사용한다. 헤더를 커스
 
          1. 그렇다면 로그인 유지처럼 인증 상태를 유지해야하는 경우는 어떻게 하나요? / 로드밸런싱에서 인증 상태는 어떻게 처리하라 수 있나요?
 
+
+
+### TCP/IP 소켓과 WebSocket의 차이는 무엇인가
+
+소켓(socket)은 운영체제 내부에 구현된 인터페이스로 응용 프로그램에게 TCP 통신 기능을 제공한다. 종단점으로서 포트(port)라고 하기도 한다. WebSocket은 하나의 TCP 커넥션으로 실시간 양방향 통신을 제공하는 전송 계층 프로토콜이다.
