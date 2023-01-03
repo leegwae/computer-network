@@ -158,6 +158,126 @@ HTTP 응답 메시지는 **HTTP 응답 상태 코드(HTTP response status codes)
 
 
 
+## HTTP 버전
+
+### HTTP/0.9
+
+초기에는 버전 번호가 없었으나 이후 버전과 구별하기 위해 0.9로 명명되었다. `GET` 메서드만 지원한다. MIME 타입, HTTP 헤더, 버전 번호를 지원하지 않는다.
+
+- 요청은 아래와 같은 형식이다.
+
+```http
+GET /mypage.html
+```
+
+- 응답은 아래와 같은 형식이다.
+
+```html
+<html>
+  A very simple HTML page
+</html>
+```
+
+### HTTP/1.0
+
+버전 번호, 상태 코드, HTTP 헤더를 지원한다. `Content-Type`으로 리소스 타입을 나타낼 수 있다.
+
+- 요청은 아래와 같은 형식이다.
+
+```http
+GET /mypage.html HTTP/1.0
+User-Agent: NCSA_Mosaic/2.0 (Windows 3.1)
+```
+
+- 응답은 아래와 같은 형식이다.
+
+```http
+200 OK
+Date: Tue, 15 Nov 1994 08:12:31 GMT
+Server: CERN/3.0 libwww/2.17
+Content-Type: text/html
+<HTML>
+A page with an image
+  <IMG SRC="/myimage.gif">
+</HTML>
+```
+
+### HTTP/1.0+
+
+`Keep-Alive` 커넥션, 가상 호스팅, 프락시 연결 등을 지원한다.
+
+#### Keep-Alive를 사용한 지속 커넥션
+
+기본적으로 한 번의 HTTP 트랜잭션마다 TCP 연결과 TCP 연결 해제 과정을 거친다. 이 TCP 커넥션 지연을 해소하기 위해 지속 커넥션을 사용할 수 있다. **지속 커넥션(persistent connection)**은 트랜잭션 처리 후에도 연결이 유지되는 TCP 커넥션이다.
+
+`Connection: Keep-Alive`로 설정하고 `Keep-Alive` 헤더에 옵션을 명시한다. `timeout` 파라미터는 커넥션을 유지하는 동안 처리할 수 있는 트랜잭션의 개수이며, `timeout`은 커넥션을 유지할 시간(초)이다.
+
+```http
+HTTP/1.1 200 OK
+Connection: Keep-Alive
+Content-Encoding: gzip
+Content-Type: text/html; charset=utf-8
+Date: Thu, 11 Aug 2016 15:23:13 GMT
+Keep-Alive: timeout=5, max=1000
+Last-Modified: Mon, 25 Jul 2016 04:32:39 GMT
+Server: Apache
+
+(body)
+```
+
+### HTTP/1.1
+
+HTTP의 첫번째 표준이다. 지속 커넥션과 파이프라이닝을 지원한다.
+
+#### 지속 커넥션
+
+HTTP/1.1은 기본적으로 **지속 커넥션**을 사용한다. HTTP/1.1 애플리케이션은`Connection:close` 헤더를 명시하여 커넥션을 끊을 수 있다.
+
+#### 파이프라이닝
+
+지속 커넥션은 요청에 대한 응답을 받아야지만 다음 데이터를 요청할 수 있다. **파이프라이닝(pipelining)**에서는 요청에 대한 응답을 기다리지 않고 요청을 보내어 latency를 낮추었다. 한편 서버는 응답을 순서대로 전송한다.
+
+#### HTTP/1.1의 문제
+
+TCP는 신뢰성 있는 데이터를 보장하므로 데이터를 순서에 맞게 보내야한다. 따라서 앞 선 요청에 대한 처리가 끝날 때까지 뒤에 오는 요청의 처리가 대기하는 **HOL(Head Of Line) Blocking** 문제가 발생한다. 또한 지속 커넥션에서 요청의 헤더가 중복되는 경우가 많아 대역폭이 낭비되는 문제가 있었다.
+
+### HTTP/2.0
+
+HTTP/2.0은 SPDY 프로토콜을 사용하여 **회전 지연(latency)**을 줄이고자 하였다. 그러나 TCP를 사용하므로 HOL Blocking 문제를 완전히 해결하지는 못한다.
+
+#### 프레임
+
+<img src="https://web-dev.imgix.net/image/C47gYyWYVMMhDmtYSLOWazuyePF2/2a2cw0nAXe9Mi5txM4Mw.svg" alt="HTTP/2 바이너리 프레이밍 레이어" width="60%;" />
+
+바이너리 프레임 계층에서 하나의 HTTP 메시지는 헤더 프레임과 데이터 프레임으로 분할되고 각각 바이너리 인코딩된다.
+
+#### 스트림과 멀티플렉싱
+
+<img src="https://web-dev.imgix.net/image/C47gYyWYVMMhDmtYSLOWazuyePF2/4RwALfscCwB7MDa1bGsV.svg" alt="공유 연결 내에서 HTTP/2 요청 및 응답 다중화" width="67%;" />
+
+**스트림(stream)**은 프레임의 시퀀스로 양방향 전송이 가능하며 다른 스트림에 독립적이다, 한 쌍의 HTTP 요청과 응답을 하나의 스트림이 처리한다. TCP 연결에 여러 개의 스트림을 동시에 열 수 있다. 각 스트림은 식별자를 가지며 이를 통해 스트림의 우선순위를 나타낼 수 있다.
+
+#### 헤더 압축
+
+<img src="https://web-dev.imgix.net/image/C47gYyWYVMMhDmtYSLOWazuyePF2/IYfczfC6ZCTxUVboaEZy.svg" alt="HPACK: HTTP/2용 헤더 압축" width="50%;" />
+
+HTTP 메시지의 헤더를 HPACK 알고리즘에 따라 압축한다. 클라이언트와 서버는 HPACK compression context를 유지한다. HPACK compression context는 인덱스를 가진 정적 테이블과 동적 테이블로 구성된다.
+
+1. 정적 테이블은 모든 연결에서 공용으로 사용하는 HTTP 헤더 목록을 제공한다.
+2. 동적 테이블은 특정 연결에서 사용한 HTTP 헤더 목록을 제공한다.
+
+정적 테이블과 동적 테이블에 헤더가 있다면 인덱스를, 그렇지 않다면 Huffman 인코딩한 값을 넣는다.
+
+#### server push
+
+서버는 클라이언트가 요청할 자원을 푸시할 수 있다. 가령 클라이언트가 HTML 문서를 요청하면 서버는 CSS, JS를 푸쉬하여 API 요청과 레이턴시를 줄일 수 있다.
+
+### HTTP/3.0
+
+HTTP/3.0dms UDP에 기반한 QUIC 프로토콜을 사용한다. 헤더를 커스터마이징하여 TCP의 지연을 줄이면서 TCP만큼의 신뢰성을 제공한다. TLS를 기본으로 적용한다. TCP+TLS의 경우 3 RTT가 소요되나 QUIC는 보내려는 데이터와 연결 설정에 필요한 데이터를 함께 보내 1 RTT를 소요한다. 한 번 연결을 설정했다면 캐싱을 통해 다음 연결부터는 0 RTT를 소요한다. 하나의 UDP 커넥션에 독립적인 QUIC stream을 사용하여 향상된 멀티플렉싱을 지원한다. 클라이언트는 Connection ID를 저장하여 클라이언트의 IP가 변경되어도 서버와 커넥션을 유지할 수 있다.
+
+
+
 ## 참고
 
 - [GeeksforGeeks - HTTP Full Form](https://www.geeksforgeeks.org/http-full-form/)
@@ -166,6 +286,8 @@ HTTP 응답 메시지는 **HTTP 응답 상태 코드(HTTP response status codes)
 - [MDN - HTTP 개요](https://developer.mozilla.org/ko/docs/Web/HTTP/Overview)
 - [MDN - HTTP의 진화](https://developer.mozilla.org/ko/docs/Web/HTTP/Basics_of_HTTP/Evolution_of_HTTP)
 - [MDN - HTTP response status codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)
+- [MDN - Keep-Alive](https://developer.mozilla.org/ko/docs/Web/HTTP/Headers/Keep-Alive)
+- [web.dev - Introduction to HTTP/2](https://web.dev/performance-http2/)
 
 
 
