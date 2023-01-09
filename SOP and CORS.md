@@ -47,22 +47,9 @@ Simple Request로 간주되는 요청은 다음과 같다.
 
 사용자 인증을 위한 `Cookie`, `Authorization` 헤더를 사용할 수 없고, `Content-Type`에 `application/json`을 사용할 수 없으므로 사용되는 경우가 드물다.
 
-### Requests with credentials
-
-브라우저는 기본적으로 `XMLHttpRequest`나 Fetch API를 사용하면 `Cookie`와 `Authorization` 헤더를 붙여보내지 않는다. fetch API의 `credentials` 옵션으로 붙여보내도록 할 수 있다.
-
-```js
-fetch(url, { credentials: 'include' })
-```
-
-이때 서버는 다음과 같은 헤더를 포함하여 응답해야한다.
-
-1. `Access-Control-Allow-Credentials: true`
-2. `Access-Control-Allow-Origin`: URL (`*`을 사용할 수 없음) 
-
 ### Preflighted requests
 
-요청을 보내기 전, 브라우저는 다음 헤더와 함께 `OPTIONS` 메서드로 요청을 보내어 서버가 CORS 정책을 위반하지 않는지 확인한다.
+안전하지 않은 메서드는 서버에 부작용을 야기할 수 있으므로 요청을 보내기 전 브라우저는 preflighted request를 보내어 서버가 CORS 정책을 위반하지 않는지 확인한다. preflighted request는 다음 헤더와 함께 `OPTIONS` 메서드를 사용한다.
 
 1. `Access-Control-Request-Method`: 실제 요청의 메서드
 2. `Access-Control-Request-Headers`: 실제 요청의 추가 헤더
@@ -86,7 +73,18 @@ Access-Control-Allow-Headers: X-PINGOTHER, Content-Type
 Access-Control-Max-Age: 86400
 ```
 
-안전하지 않은 메서드의 경우 서버의 부작용을 야기할 수 있기 때문에 preflighted request로 CORS를 위반하지 않는지 확인하여 서버를 보호한다.
+### Requests with credentials
+
+브라우저는 기본적으로 `XMLHttpRequest`나 Fetch API를 사용하면 `Cookie`와 `Authorization` 헤더를 붙여보내지 않는다. fetch API의 `credentials` 옵션으로 붙여보내도록 할 수 있다.
+
+```js
+fetch(url, { credentials: 'include' })
+```
+
+이때 서버는 다음과 같은 헤더를 포함하여 응답해야한다.
+
+1. `Access-Control-Allow-Credentials: true`
+2. `Access-Control-Allow-Origin`: URL (`*`을 사용할 수 없음) 
 
 
 
@@ -106,3 +104,23 @@ Access-Control-Max-Age: 86400
 - [MDN - Origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin)
 - [MDN - Same-origin policy](https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy)
 - [MDN - Cross-Origin Resource Sharing](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)
+
+
+
+## 스터디
+
+1. same-origin과 cross-origin이 무엇인지 설명해주세요
+
+   서로 다른 두 웹 컨텐츠의 origin이 같다면 same-origin이고 다르면 cross-origin이다.
+
+   웹 컨텐츠의 origin은 무엇인가?
+
+   웹 컨텐츠에 접근할 때 사용하는 URL에서 scheme, domain name, port로 구성된다.
+
+   1. 왜 브라우저는 same-origin policy를 적용할까요?
+
+      서버 사이드 렌더링을 사용하던 초기에는 다른 origin으로 요청을 보내는 것을 악의적인 공격(CSRF, XSS)으로 간주하는 것이 자연스러웠기 때문이다.
+
+      1. 어떻게 cross-origin 요청을 보낼 수 있나요?
+
+         서버가 CORS 정책을 준수하도록 HTTP 응답의 헤더를 설정한다. 혹은 프록시 서버를 사용하여 클라이언트의 same-origin 요청을 서버에게 전달한다.  
