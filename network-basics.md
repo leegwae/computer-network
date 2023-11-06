@@ -84,7 +84,7 @@
 
 서로 다른 시스템 간의 연결을 위해 표준된 연결 방식이 필요하다. 국제 표준화 기구인 **ISO(International Standard Organization)**는 **OSI(Open System Interconnectioin)** 7계층 모델로 네트워크 시스템이 갖춰야할 기능을 정의한다.
 
-OSI 7 계층에 대해서는 [다음](https://github.com/leegwae/computer-network/blob/main/OSI%207%20Layer%20Model.md)을 참고한다.
+OSI 7 계층에 대해서는 [다음](https://github.com/leegwae/computer-network/blob/main/osi-7-layer-model.md)을 참고한다.
 
 ### 인터네트워킹
 
